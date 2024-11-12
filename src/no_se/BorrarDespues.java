@@ -7,6 +7,9 @@ public class BorrarDespues {
 		System.out.println("Hola, el inicio de las tareas :)");
 		
 		int anho = 2003;
+		
+		String name = "Elias";
+		System.out.println("Hello " + name);
 	}
 
 }
