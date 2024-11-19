@@ -1,5 +1,5 @@
 package TareasCLI;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 import TareasCLI.status.*;
 
@@ -8,8 +8,8 @@ public class tareas {
 	static int idSiguiente = 1;
 	String description;
 	StatusTypo status;
-	Date createdAt = new Date();
-	Date updateAt;
+	LocalDateTime createdAt;
+	LocalDateTime updateAt;
 	
 
 	public tareas(String d, StatusTypo status) {
@@ -18,6 +18,8 @@ public class tareas {
 		id = idSiguiente;
 		idSiguiente++;
 		this.status = status ;
+		createdAt = LocalDateTime.now();
+		updateAt = LocalDateTime.now();
 	}
 	
 	public String description() {
@@ -30,6 +32,7 @@ public class tareas {
 	
 	public void update(String newDescription) {
 		description = newDescription;
+		updateAt = LocalDateTime.now();
 	}
 	
 	public StatusTypo status() {
@@ -39,6 +42,16 @@ public class tareas {
 	public void updateStatus(StatusTypo status) {
 		this.status = status;
 	}
+	
+	LocalDateTime createdDate() {
+		return createdAt;
+	}
+	
+	LocalDateTime updateDate() {
+		return updateAt;
+	}
+	
+	
 	
 }
 
