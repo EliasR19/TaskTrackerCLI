@@ -1,7 +1,6 @@
 package TareasCLI;
 
 import java.util.ArrayList;
-import TareasCLI.gestor.taskFactory;
 import TareasCLI.status.StatusTypo;
 
 
@@ -11,12 +10,13 @@ public class TackCli {
 
 		gestor gestor = new gestor();
 		
+		gestor.loadTask();
 		
-		gestor.addTask("Dormir");
-		gestor.addTask("Dormir");
-		gestor.addTask("Dormir");
-		gestor.addTask("Dormir");
-		gestor.addTask("Dormir");
+//		gestor.addTask("Dormir");
+//		gestor.addTask("Dormir");
+//		gestor.addTask("Dormir");
+//		gestor.addTask("Dormir");
+//		gestor.addTask("Dormir");
 		
 		switch(args[0]){
 		case("add"):
@@ -25,7 +25,7 @@ public class TackCli {
 		case("update"):
 			gestor.updateTask(args[1], args[2]);
 			break;
-		case("delete"):
+		case("remove"):
 			gestor.deleteTask(args[1]);
 		break;
 		/*
@@ -38,9 +38,12 @@ public class TackCli {
 			*/
 
 		}
+		
+		gestor.saveTasks();
 		gestor.showTasks();
 		//Prueba de commit
 	}
+	
 }
 
 

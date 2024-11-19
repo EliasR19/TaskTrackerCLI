@@ -1,15 +1,91 @@
 package TareasCLI;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
-import TareasCLI.status.StatusTypo;
 
 public class gestor {
 	List<tareas> tasks = new ArrayList<tareas>();
+	Path path = Path.of("tasks.text");
+	
+	//Constructor, cuando se inicializa la clase llama a loadTask() y agarra la lista de tareas del archivo;
+	
+	public gestor() {
+		tasks = loadTask();
+	}
+	
+	
+	
+	// Cargar las tareas guardadas del archivo
+	public List<tareas> loadTask() {
+		List<tareas> loadT = new ArrayList<>();
+	
+		if(!Files.exists(path)) {
+			//System.out.println("No existe");
+			return new ArrayList<>();
+		}
+		
+		try {
+			String content = Files.readString(path);			
+			String[]  taskList = content.replace("[", "").replace("]", "").split("},");
+
+
+			for(String t : taskList) {
+				/*
+				if(!t.endsWith("}")) {
+					t = t + "}";
+				}*/
+				
+				loadT.add(tareas.fromJson(t));
+				
+				//System.out.println("a=" + t);
+			}
+
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		return loadT;
+	}
+	
+	/*Construir un string
+	 * - emepiza por \n
+	 * por cada tarea de la lista convertilo a json
+	 * */
+	public void saveTasks() {
+		StringBuilder string = new StringBuilder();
+		string.append("[\n");
+		
+		for(tareas task : tasks) {
+			string.append(task.toJson());
+			if(task == tasks.getLast()) {
+				string.append("\n");
+			} else {
+				string.append(",\n");
+			}
+		}
+		
+		string.append("]");
+		
+		//System.out.println(string);
+		
+		try {
+			Files.writeString(path, string.toString());
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
+	
+	
+	
 	
 	void addTask(String description) {
-		tasks.add(taskFactory.crear(description));
+		tasks.add(new tareas(description));
 	}
 	
 	void updateTask(String id, String description) {
@@ -23,7 +99,7 @@ public class gestor {
 	}
 	
 	tareas findTask(String id) {
-		return tasks.stream().filter(t -> t.id() == Integer.valueOf(id)).findAny().orElseThrow(() -> new IllegalArgumentException("No hay tarea con id " + id));
+		return tasks.stream().filter(t -> t.id() == Integer.valueOf(id)).findFirst().orElseThrow(() -> new IllegalArgumentException("No hay tarea con id " + id));
 	}
 	
 	
@@ -32,25 +108,13 @@ public class gestor {
 		return tasks;
 	}
 	
-	
-	void showTasks() {
+	public void showTasks() {
 		for(tareas t : tasks) {
-			String info = "ID: " + t.id() + " | Description: " + t.description + " | Status: " + t.status + 
-					" | Created: " + t.createdDate() + " | LastUpdate: " + t.updateDate();
-			System.out.println(info);
-			
-			for(int x = 0; x < info.length(); x++) {
-				System.out.print("-");
-			}
-			System.out.print("\n");
+			System.out.println(t.toJson());
+		}
+	}
 
-		}
-	}
-	
-	public static class taskFactory {
-		public static tareas crear(String d) {
-			return new tareas(d, StatusTypo.TODO);
-		}
-	}
-	
+
 }
+	
+
