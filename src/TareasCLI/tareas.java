@@ -1,7 +1,5 @@
 package TareasCLI;
 import java.time.LocalDateTime;
-import TareasCLI.status.StatusTypo;
-
 
 import TareasCLI.status.StatusTypo;
 
@@ -53,6 +51,19 @@ public class tareas {
 		return updateAt;
 	}
 	
+	
+	
+	public boolean is(StatusTypo status) {
+		return this.status.equals(status);
+	}
+	
+	
+	
+	
+	
+	
+	
+	
 	public static tareas fromJson(String taskJson) {
 		taskJson = taskJson.replace("{", "").replace("}", "").replace("\"", "");
 		String [] task1 = taskJson.split(",");		
@@ -87,16 +98,10 @@ public class tareas {
 		+ "\", \"Created\":\"" + createdAt.toString() + "\", \"LastUpdate\":\"" + updateAt.toString() + "\"}";
 	}
 	
-	void showTask() {
-			String info = "ID: " + id() + " | Description: " + description + " | Status: " + status.toString() + 
+	String showTask() {
+			return "ID: " + id() + " | Description: " + description + " | Status: " + status.toString() + 
 					" | Created: " + createdDate().toString() + " | LastUpdate: " + updateDate().toString();
-			System.out.println(info);
 			
-			for(int x = 0; x < info.length(); x++) {
-				System.out.print("-");
-			}
-			System.out.print("\n");
-
 		}
 	
 	

@@ -20,27 +20,39 @@ public class TackCli {
 		
 		switch(args[0]){
 		case("add"):
+			System.out.println("Agregando...");
 			gestor.addTask(args[1]);
 			break;
 		case("update"):
 			gestor.updateTask(args[1], args[2]);
 			break;
 		case("remove"):
-			gestor.deleteTask(args[1]);
-		break;
-		/*
+			gestor.removeTask(args[1]);
+			break;
+		case("remove-all"):
+			gestor.removeAll();
+			break;
 		case("mark-in-progress"):
-			tasks.get(taskConvertor(args[1], tasks).id() - 1).updateStatus(StatusTypo.IN_PROGRESS);
+			gestor.updateStatus(StatusTypo.IN_PROGRESS, args[1]);
+			break;
 		
 		case("mark-done"):
-			tasks.get(taskConvertor(args[1], tasks).id() - 1).updateStatus(StatusTypo.DONE);
-		}
-			*/
-
+			gestor.updateStatus(StatusTypo.DONE, args[1]);
+			break;
+		case("list"):
+			if(args.length == 1) {
+				gestor.showTasks("all");
+			} else {
+				gestor.showTasks(args[1]);
+				break;
+			}
 		}
 		
+
+		
+		
 		gestor.saveTasks();
-		gestor.showTasks();
+		//gestor.showTasks();
 		//Prueba de commit
 	}
 	

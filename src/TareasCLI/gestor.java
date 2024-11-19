@@ -5,6 +5,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
+
+import TareasCLI.status.StatusTypo;
 
 
 public class gestor {
@@ -29,19 +32,16 @@ public class gestor {
 		}
 		
 		try {
-			String content = Files.readString(path);			
+			String content = Files.readString(path);		
 			String[]  taskList = content.replace("[", "").replace("]", "").split("},");
-
-
+						
 			for(String t : taskList) {
-				/*
-				if(!t.endsWith("}")) {
-					t = t + "}";
-				}*/
+					loadT.add(tareas.fromJson(t));
 				
-				loadT.add(tareas.fromJson(t));
+					
 				
-				//System.out.println("a=" + t);
+				
+			
 			}
 
 		} catch (IOException e) {
@@ -51,6 +51,8 @@ public class gestor {
 		
 		return loadT;
 	}
+	
+
 	
 	/*Construir un string
 	 * - emepiza por \n
@@ -84,6 +86,7 @@ public class gestor {
 	
 	
 	
+	
 	void addTask(String description) {
 		tasks.add(new tareas(description));
 	}
@@ -93,26 +96,61 @@ public class gestor {
 		currTask.update(description);
 	}
 	
-	void deleteTask(String id) {
+	void removeTask(String id) {
 		tareas currTask = findTask(id);
 		tasks.remove(currTask);
 	}
+	
+	void removeAll() {
+		tasks.removeAll(tasks);
+	}
+	
+	void updateStatus(StatusTypo statusNew, String id) {
+		tareas currTask = findTask(id);
+		currTask.updateStatus(statusNew);
+	}
+	
+	
+	
 	
 	tareas findTask(String id) {
 		return tasks.stream().filter(t -> t.id() == Integer.valueOf(id)).findFirst().orElseThrow(() -> new IllegalArgumentException("No hay tarea con id " + id));
 	}
 	
 	
-	//Test
+	
 	List<tareas> tasks(){
 		return tasks;
 	}
 	
-	public void showTasks() {
-		for(tareas t : tasks) {
-			System.out.println(t.toJson());
+	public void showTasks(String args) {
+		if(args.equals("all")) {	
+				showList(tasks);		
+		} else {
+				showList(showStatus(args));	
 		}
 	}
+	
+	public List<tareas> showStatus(String status) {
+		StatusTypo statusShow= StatusTypo.valueOf(status.toUpperCase().replace("-", "_"));
+		return tasks.stream().filter(t -> t.is(statusShow)).collect(Collectors.toList());
+	}
+	
+	public void showList(List<tareas> listTasks) {
+		for(tareas t : listTasks) {
+			System.out.println(t.showTask());
+			makeTable(t.showTask());
+		}
+	}
+	
+	public void makeTable(String line) {
+		for(int x = 0; x < line.length(); x++) {
+			System.out.print("-");
+		}
+		System.out.print("\n");
+
+	}
+	
 
 
 }
